@@ -100,11 +100,7 @@ namespace Lab
             var result = new List<byte> {0};
 
             if (left.Length < right.Length)
-            {
-                var t = left;
-                left = right;
-                right = t;
-            }
+                return Add(sign, right, left);
 
             for (var i = 0; i < left.Length; i++)
             {
@@ -121,11 +117,7 @@ namespace Lab
         private static BigInt Subtract(char sign, BigInt left, BigInt right)
         {
             if (left.Abs() < right.Abs())
-            {
-                var temp = left;
-                left = right;
-                right = temp;
-            }
+                return Subtract(sign, right, left);
 
             var result = new List<int>(left.digits.Select(x => (int)x));
 
@@ -165,7 +157,7 @@ namespace Lab
                     result.Add((byte) (multiplicationResult / 10));
             }
 
-            return new BigInt(source.sign > 0 ? '+' : '-', Enumerable.Reverse(result).SkipWhile(x => x == 0).ToList());
+            return new BigInt(source.sign > 0 ? '+' : '-', Enumerable.Reverse(result).SkipWhile(x => x == 0));
         }
 
         private static BigInt MultiplyOnTen(BigInt source, int powerOfTen = 1)
@@ -177,7 +169,7 @@ namespace Lab
                 return source;
 
             var result = Enumerable.Reverse(source.digits).Concat(Enumerable.Repeat((byte) 0, powerOfTen));
-            return new BigInt(source.sign > 0 ? '+' : '-', result.ToList());
+            return new BigInt(source.sign > 0 ? '+' : '-', result);
         }
 
         private static BigInt Divide(BigInt dividend, BigInt divisor)
